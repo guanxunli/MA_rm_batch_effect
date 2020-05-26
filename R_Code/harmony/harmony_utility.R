@@ -67,11 +67,11 @@ plot_res <- function(obj, reduc_method = "pca", seed.use = 10, dims = 1:npcs,
   p11 <- DimPlot(object = obj, dims = c(1,2), reduction = "tsne", pt.size = 0.5, group.by = batch_label)
   if (is.null(celltype_label) == FALSE){
     p12 <- DimPlot(object = obj, dims = c(1,2), reduction = "tsne", pt.size = 0.5, group.by = celltype_label)
-    png(paste0("R_Code/harmony/results/", dataset, "_tsne_",reduc_method,".png"),width = 2*1000, height = 800, res = 2*72)
+    png(paste0("R_Code/results/harmony_results/", dataset, "/tsne_", reduc_method, "harmony.png"),width = 2*1000, height = 800, res = 2*72)
     print(plot_grid(p11, p12))
     dev.off()
   } else{
-    png(paste0("R_Code/harmony/results/", dataset, "_tsne_",reduc_method,".png"),width = 2*1000, height = 800, res = 2*72)
+    png(paste0("R_Code/results/harmony_results/", dataset, "/tsne_", reduc_method, "harmony.png"),width = 2*1000, height = 800, res = 2*72)
     print(p11)
     dev.off()
   }
@@ -82,11 +82,11 @@ plot_res <- function(obj, reduc_method = "pca", seed.use = 10, dims = 1:npcs,
   p11 <- DimPlot(object = obj, dims = c(1,2), reduction = "umap", pt.size = 0.5, group.by = batch_label)
   if (is.null(celltype_label) == FALSE){
     p12 <- DimPlot(object = obj, dims = c(1,2), reduction = "umap", pt.size = 0.5, group.by = celltype_label)
-    png(paste0("R_Code/harmony/results/", dataset, "_umap_",reduc_method,".png"),width = 2*1000, height = 800, res = 2*72)
+    png(paste0("R_Code/results/harmony_results/", dataset, "/umap_", reduc_method, "harmony.png"), width = 2*1000, height = 800, res = 2*72)
     print(plot_grid(p11, p12))
     dev.off()
   } else{
-    png(paste0("R_Code/harmony/results/", dataset, "_umap_",reduc_method,".png"),width = 2*1000, height = 800, res = 2*72)
+    png(paste0("R_Code/results/harmony_results/", dataset, "/umap_", reduc_method, "harmony.png"), width = 2*1000, height = 800, res = 2*72)
     print(p11)
     dev.off()
   }
