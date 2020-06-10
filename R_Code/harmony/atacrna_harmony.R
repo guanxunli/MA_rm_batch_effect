@@ -46,8 +46,8 @@ DimPlot(object = b_seurat, dims = c(1,2), reduction = "tsne", pt.size = 0.5, gro
 DimPlot(object = b_seurat, dims = c(1,2), reduction = "umap", pt.size = 0.5, group.by = batch_label)
 
 ##########################################################
-# harmony in Seurat                           
-b_seurat = RunHarmony(b_seurat, batch_label = batch_label,
+# harmony together                         
+b_seurat = RunHarmony(b_seurat, group.by.vars = batch_label,
                           theta_harmony = 2, numclust = 50, max_iter_cluster = 100)
 # plot before removing batch effect
 b_seurat <- RunTSNE(b_seurat, reduction = "harmony", seed.use = 10, dim.embed = 2, dims = 1:100)
@@ -66,6 +66,10 @@ dev.off()
 
 saveRDS(b_seurat@reductions$harmony@cell.embeddings, "R_Code/results/harmony_results/atacrna/harmony_together.rds")
 
+## plot one to one
+dta_embd <- b_seurat@reductions$tsne@cell.embeddings
+p <- plot_onetoone(dta_embd, batch = b_seurat@meta.data$batchlb)
+print(p)
 ##################### seperate harmony ###################
 rownames(rna_metadata) <- colnames(dta_rna)
 b_seurat_rna <- data_preprocess(obj = dta_rna, min.cells = 1, min.features = 10, percent.mt = 10, oversd = NULL, 
@@ -106,3 +110,18 @@ print(p2)
 dev.off()
 
 saveRDS(b_seurat@reductions$harmony@cell.embeddings, "R_Code/results/harmony_results/atacrna/harmony_seperate.rds")
+
+## plot one to one
+p1 <- ggplot(data = NULL, aes(tsne_embeddings[, 1], tsne_embeddings[, 2], color = b_seurat@meta.data$batchlb)) +
+  geom_point(size = 0.5) +
+  labs(x = "T-SNE1", y = "T-SNE2", color = "data type") 
+dta_embd <- tsne_embeddings
+p2 <- plot_onetoone(dta_embd, batch = b_seurat@meta.data$batchlb)
+print(plot_grid(p1,p2), nrow = 1)
+
+p1 <- ggplot(data = NULL, aes(umap_embeddings[, 1], umap_embeddings[, 2], color = b_seurat@meta.data$batchlb)) +
+  geom_point(size = 0.5) +
+  labs(x = "UMAP1", y = "UMAP2", color = "data type")
+dta_embd <- umap_embeddings
+p2 <- plot_onetoone(dta_embd, batch = b_seurat@meta.data$batchlb)
+print(plot_grid(p1,p2), nrow = 1)

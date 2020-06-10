@@ -13,9 +13,9 @@ dta_seurat <- dta_seurat %*% dta_seurat_svd$v
 ## evaluation
 source("Evaluation/utility.R")
 # kBET
-dta_harmony_toge_kBET <- kBET_fun(data = dta_harmony_together, batch = batch)
-dta_harmony_sepe_kBET <- kBET_fun(data = dta_harmony_seperate, batch = batch)
-dta_seurat_kBET <- kBET_fun(data = dta_seurat, batch = batch)
+dta_harmony_toge_kBET <- kBET_fun(data = dta_harmony_together, batch = batch, subset_size = 0.25)
+dta_harmony_sepe_kBET <- kBET_fun(data = dta_harmony_seperate, batch = batch, subset_size = 0.25)
+dta_seurat_kBET <- kBET_fun(data = dta_seurat, batch = batch, subset_size = 0.25)
 dta <- data.frame("reject rate" = c(dta_harmony_toge_kBET, dta_harmony_sepe_kBET, dta_seurat_kBET), 
                      "percentage of sample size" = rep(seq(0.05, 0.25, by = 0.05), 3),
                      "data type" = c(rep("harmony-together", 5), rep("harmony-seperate", 5), rep("seurat", 5)))
