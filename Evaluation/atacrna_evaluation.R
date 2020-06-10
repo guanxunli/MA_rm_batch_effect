@@ -23,3 +23,24 @@ ggplot(data = dta, aes(x = percentage.of.sample.size, y = reject.rate)) +
   geom_line(aes(color = data.type)) +
   geom_point(aes(color = data.type))
 
+# lisi
+library(lisi)
+batch <- as.data.frame(batch)
+colnames(batch) <- "batch"
+mean(compute_lisi(dta_harmony, meta_data = batch, label_colnames = "batch")[, 1])
+mean(compute_lisi(dta_harmonyseurat, meta_data = batch, label_colnames = "batch")[, 1])
+mean(compute_lisi(dta_seurat, meta_data = batch, label_colnames = "batch")[, 1])
+
+# ARI
+library(mclust)
+library(stats)
+
+dta_harmony_kmeans <- kmeans(dta_harmony, nstart = 10, centers = 2)
+adjustedRandIndex(dta_harmony_kmeans$cluster, batch$batch)
+dta_harmony_kmeans <- kmeans(dta_harmonyseurat, nstart = 10, centers = 2)
+adjustedRandIndex(dta_harmony_kmeans$cluster, batch$batch)
+dta_harmony_kmeans <- kmeans(dta_seurat, nstart = 10, centers = 2)
+adjustedRandIndex(dta_harmony_kmeans$cluster, batch$batch)
+
+
+
