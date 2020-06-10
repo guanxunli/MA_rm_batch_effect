@@ -34,7 +34,7 @@ source("R_Code/Seurat/Seurat_utility.R")
 npcs = 50
 batch_label = "batchlb"
 
-batch_list <- data_preprocess(expr_mat, min.cells = 10, min.features = 300, percent.mt = 10, oversd = NULL, 
+batch_list <- data_preprocess(expr_mat, min.cells = 1, min.features = 10, percent.mt = 10, oversd = NULL, 
                               normalization.method = "LogNormalize", scale.factor = 10000, selection.method = "vst", 
                               nfeatures = 2000, npcs = 50, metadata = metadata, batch_label = batch_label)
 
@@ -43,4 +43,22 @@ batch_list <- data_preprocess(expr_mat, min.cells = 10, min.features = 300, perc
 
 batches <- seurat_integrate(batch_list = batch_list, npcs = npcs)
 
+## plot results
+
+## plot results
+dta_use <- as.matrix(batches@assays$integrated@data)
+dta_use <- t(dta_use)
+tsne_embeddings <- Rtsne::Rtsne(dta_use, is_distance=FALSE, perplexity=30, num_threads=1, verbose=FALSE)$Y
+umap_embeddings <- umap::umap(dta_use)$layout
+
+ggplot(data = NULL, aes(tsne_embeddings[, 1], tsne_embeddings[, 2], color = metadata$batchlb)) +
+  geom_point(size = 0.5) +
+  labs(x = "T-SNE1", y = "T-SNE2", color = "data type") 
+ggplot(data = NULL, aes(umap_embeddings[, 1], umap_embeddings[, 2], color = metadata$batchlb)) +
+  geom_point(size = 0.5) +
+  labs(x = "UMAP1", y = "UMAP2", color = "data type")
+
+
+## save results
+saveRDS(dta_use,"R_Code/results/seurat_results/atacrna/seurat_atacrna.rds")
 plot_res(obj = batches, dataset = "atacrna", batch_label = batch_label, celltype_label = NULL)
