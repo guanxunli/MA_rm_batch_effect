@@ -51,14 +51,22 @@ dta_use <- t(dta_use)
 tsne_embeddings <- Rtsne::Rtsne(dta_use, is_distance=FALSE, perplexity=30, num_threads=1, verbose=FALSE)$Y
 umap_embeddings <- umap::umap(dta_use)$layout
 
-ggplot(data = NULL, aes(tsne_embeddings[, 1], tsne_embeddings[, 2], color = metadata$batchlb)) +
+p1 <- ggplot(data = NULL, aes(tsne_embeddings[, 1], tsne_embeddings[, 2], color = metadata$batchlb)) +
   geom_point(size = 0.5) +
   labs(x = "T-SNE1", y = "T-SNE2", color = "data type") 
-ggplot(data = NULL, aes(umap_embeddings[, 1], umap_embeddings[, 2], color = metadata$batchlb)) +
+print(p1)
+p2 <- ggplot(data = NULL, aes(umap_embeddings[, 1], umap_embeddings[, 2], color = metadata$batchlb)) +
   geom_point(size = 0.5) +
   labs(x = "UMAP1", y = "UMAP2", color = "data type")
+print(p2)
 
+# save results
+png("R_Code/results/seurat_results/atacrna/tsne_seurat.png",width = 2*1000, height = 800, res = 2*72)
+print(p1)
+dev.off()
 
-## save results
-saveRDS(dta_use,"R_Code/results/seurat_results/atacrna/seurat_atacrna.rds")
-plot_res(obj = batches, dataset = "atacrna", batch_label = batch_label, celltype_label = NULL)
+png("R_Code/results/seurat_results/atacrna/umap_seurat.png",width = 2*1000, height = 800, res = 2*72)
+print(p2)
+dev.off()
+
+saveRDS(dta_use, "R_Code/results/seurat_results/atacrna/seurat_atacrna.rds")

@@ -53,8 +53,37 @@ batch_list <- data_preprocess(expr_mat, min.cells = 10, min.features = 300, perc
 
 batches <- seurat_integrate(batch_list = batch_list, npcs = npcs)
 
-plot_res(obj = batches, dataset = "pbmc", batch_label = batch_label, celltype_label = celltype_label)
+## plot results
+dta_use <- as.matrix(batches@assays$integrated@data)
+dta_use <- t(dta_use)
+tsne_embeddings <- Rtsne::Rtsne(dta_use, is_distance=FALSE, perplexity=30, num_threads=1, verbose=FALSE)$Y
+umap_embeddings <- umap::umap(dta_use)$layout
 
+p11 <- ggplot(data = NULL, aes(tsne_embeddings[, 1], tsne_embeddings[, 2], color = metadata$batchlb)) +
+  geom_point(size = 0.5) +
+  labs(x = "T-SNE1", y = "T-SNE2", color = "data type") 
+p12 <- ggplot(data = NULL, aes(tsne_embeddings[, 1], tsne_embeddings[, 2], color = metadata$cell_type)) +
+  geom_point(size = 0.5) +
+  labs(x = "T-SNE1", y = "T-SNE2", color = "data type") 
+print(plot_grid(p11 + p12))
+p21 <- ggplot(data = NULL, aes(umap_embeddings[, 1], umap_embeddings[, 2], color = metadata$batchlb)) +
+  geom_point(size = 0.5) +
+  labs(x = "UMAP1", y = "UMAP2", color = "data type")
+p22 <- ggplot(data = NULL, aes(umap_embeddings[, 1], umap_embeddings[, 2], color = metadata$cell_type)) +
+  geom_point(size = 0.5) +
+  labs(x = "UMAP1", y = "UMAP2", color = "data type")
+print(plot_grid(p21 + p22))
+
+# save results
+png("R_Code/results/seurat_results/pbmc/tsne_seurat.png",width = 2*1000, height = 800, res = 2*72)
+print(plot_grid(p11 + p12))
+dev.off()
+
+png("R_Code/results/seurat_results/pbmc/umap_seurat.png",width = 2*1000, height = 800, res = 2*72)
+print(plot_grid(p21 + p22))
+dev.off()
+
+saveRDS(dta_use, "R_Code/results/seurat_results/pbmc/pbmc_seurat.rds")
 
 
 
