@@ -40,7 +40,7 @@ expr_mat <- expr_mat[, rownames(metadata)]
 source("R_Code/Seurat/Seurat_utility.R")
 
 # data preprocess
-npcs = 50
+npcs = 100
 batch_label = "batchlb"
 celltype_label = "cell_type"
 
@@ -59,13 +59,13 @@ dta_use <- t(dta_use)
 tsne_embeddings <- Rtsne::Rtsne(dta_use, is_distance=FALSE, perplexity=30, num_threads=1, verbose=FALSE)$Y
 umap_embeddings <- umap::umap(dta_use)$layout
 
-p11 <- ggplot(data = NULL, aes(tsne_embeddings[, 1], tsne_embeddings[, 2], color = metadata$batchlb)) +
+p11 <- ggplot(data = NULL, aes(tsne_embeddings[, 1], tsne_embeddings[, 2], color = batches@meta.data$batchlb)) +
   geom_point(size = 0.5) +
   labs(x = "T-SNE1", y = "T-SNE2", color = "data type") 
-p12 <- ggplot(data = NULL, aes(tsne_embeddings[, 1], tsne_embeddings[, 2], color = metadata$cell_type)) +
+p12 <- ggplot(data = NULL, aes(tsne_embeddings[, 1], tsne_embeddings[, 2], color = batches@meta.data$cell_type)) +
   geom_point(size = 0.5) +
   labs(x = "T-SNE1", y = "T-SNE2", color = "data type") 
-print(plot_grid(p11 + p12))
+print(plot_grid(p11, p12))
 p21 <- ggplot(data = NULL, aes(umap_embeddings[, 1], umap_embeddings[, 2], color = metadata$batchlb)) +
   geom_point(size = 0.5) +
   labs(x = "UMAP1", y = "UMAP2", color = "data type")

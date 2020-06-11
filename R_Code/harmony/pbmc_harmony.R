@@ -40,7 +40,7 @@ expr_mat <- expr_mat[, rownames(metadata)]
 source("R_Code/harmony/harmony_utility.R")
 
 # data preprocess
-npcs = 50
+npcs = 100
 batch_label = "batchlb"
 celltype_label = "cell_type"
 
@@ -57,25 +57,25 @@ DimPlot(object = b_seurat, dims = c(1,2), reduction = "umap", pt.size = 0.5, gro
 
 ##########################################################
 # harmony in Seurat                           
-b_seurat = RunHarmony(b_seurat, batch_label = batch_label,
+b_seurat = RunHarmony(b_seurat, group.by.vars = batch_label,
                           theta_harmony = 2, numclust = 50, max_iter_cluster = 100)
 
 b_seurat <- RunTSNE(b_seurat, reduction = "harmony", seed.use = 10, dim.embed = 2, dims = 1:100)
 b_seurat <- RunUMAP(b_seurat, reduction = "harmony", n.components = 2, seed.use = 10 , dims = 1:100)
 p11 <- DimPlot(object = b_seurat, dims = c(1,2), reduction = "tsne", pt.size = 0.5, group.by = batch_label)
 p12 <- DimPlot(object = b_seurat, dims = c(1,2), reduction = "tsne", pt.size = 0.5, group.by = celltype_label)
-print(plot_grid(p11 + p12))
+print(p11 + p12)
 p21 <- DimPlot(object = b_seurat, dims = c(1,2), reduction = "umap", pt.size = 0.5, group.by = batch_label)
 p22 <- DimPlot(object = b_seurat, dims = c(1,2), reduction = "umap", pt.size = 0.5, group.by = celltype_label)
-print(plot_grid(p21 + p22))
+print(p21 + p22)
 
 # save results
 png("R_Code/results/harmony_results/pbmc/pbmc_tsne_harmony.png",width = 2*1000, height = 800, res = 2*72)
-print(plot_grid(p11 + p12))
+print(p11 + p12)
 dev.off()
 
 png("R_Code/results/harmony_results/pbmc/pbmc_umap_harmony.png",width = 2*1000, height = 800, res = 2*72)
-print(plot_grid(p21 + p22))
+print(p21 + p22)
 dev.off()
 
 saveRDS(b_seurat@reductions$harmony@cell.embeddings, "R_Code/results/harmony_results/pbmc/pbmc_harmony.rds")
