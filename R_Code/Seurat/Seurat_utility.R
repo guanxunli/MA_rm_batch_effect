@@ -46,5 +46,16 @@ seurat_integrate <- function(batch_list, npcs = 50){
   return(batches)
 }
 
+# plot for atacrna
+plot_onetoone <- function(dta_embed, batch){
+  dta_use <- data.frame("x" = dta_embed[, 1], "y" = dta_embed[, 2], "batch" = batch)
+  n <- nrow(dta_embed)/2
+  dta_use$group <- c(1:n, 1:n)
+  p <- ggplot(data = dta_use, aes(x, y, color = batch, group = group)) +
+    geom_point(size = 0.5) +
+    geom_line(color = "black", size = 0.25) +
+    labs(x = "embed1", y = "embed2", color = "data type")
+  return(p)
+}
 
 
