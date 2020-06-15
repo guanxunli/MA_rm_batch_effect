@@ -89,9 +89,9 @@ print(plot_grid(p21 + p22))
 
 # save results
 png("R_Code/Seurat/seurat_results/Simulation1/tsne_seurat.png",width = 2*1000, height = 800, res = 2*72)
-print(plot_grid(p11 + p12))
+print(plot_grid(p11, p12))
 dev.off()
 
 png("R_Code/Seurat/seurat_results/Simulation1/umap_seurat.png",width = 2*1000, height = 800, res = 2*72)
-print(plot_grid(p21 + p22))
+print(plot_grid(p21, p22))
 dev.off()
