@@ -111,13 +111,13 @@ p21 <- ggplot(data = NULL, aes(umap_embeddings[, 1], umap_embeddings[, 2], color
 p22 <- ggplot(data = NULL, aes(umap_embeddings[, 1], umap_embeddings[, 2], color = batches@meta.data$cell_type)) +
   geom_point(size = 0.5) +
   labs(x = "UMAP1", y = "UMAP2", color = "data type")
-print(plot_grid(p21 + p22))
+print(plot_grid(p21, p22))
 
 # save results
 png("R_Code/seurat/seurat_results/Simulation2/tsne_seurat.png",width = 2*1000, height = 800, res = 2*72)
-print(plot_grid(p11 + p12))
+print(plot_grid(p11, p12))
 dev.off()
 
 png("R_Code/seurat/seurat_results/Simulation2/umap_seurat.png",width = 2*1000, height = 800, res = 2*72)
-print(plot_grid(p21 + p22))
+print(plot_grid(p21, p22))
 dev.off()
